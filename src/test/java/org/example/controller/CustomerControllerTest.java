@@ -1,6 +1,5 @@
 package org.example.controller;
 
-import org.example.controller.CustomerController;
 import org.example.model.Customer;
 import org.example.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -155,7 +154,6 @@ class CustomerControllerTest {
         ResponseEntity<Object> response = customerController.updateCustomer(id, updatedCustomer);
         assert(response.getStatusCode() == HttpStatus.OK);
 
-        // Verifique se o corpo da resposta está vazio
         assert(response.getBody() == null);
 
         verify(customerRepository, times(1)).findById(id);
