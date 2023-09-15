@@ -40,25 +40,40 @@ public class SaleController {
 
 
     @GetMapping("/salesAbove10")
-    public List<Sale> getSalesAbove10() {
-        return saleRepository.findByProductPriceGreaterThan(10.00);
+    public ResponseEntity<Object> getSalesAbove10() {
+        List<Sale> salesAbove10 = saleRepository.findByTotalValueGreaterThan(10.00);
+
+        if (salesAbove10.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não há vendas com valor total acima de 10.00.");
+        }
+
+        return ResponseEntity.ok(salesAbove10);
     }
     @PutMapping("/updateTotalValueToZero")
     public ResponseEntity<Void> updateTotalValueToZero() {
         saleRepository.updateTotalValueToZero();
         return ResponseEntity.ok().build();
     }
-
-    @PostMapping
+        @PostMapping
     public ResponseEntity<Object> createSale(@RequestBody Sale sale) {
+        Optional<Seller> sellerOptional = sellerRepository.findById(sale.getSeller().getId());
+        if (!sellerOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vendedor não encontrado.");
+        }
+
+        Optional<Customer> customerOptional = customerRepository.findById(sale.getCustomer().getId());
+        if (!customerOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cliente não encontrado.");
+        }
+
         saleRepository.save(sale);
+
         return ResponseEntity.status(HttpStatus.CREATED).body("Venda criada.");
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getSaleById(@PathVariable Long id) {
         Sale sale = saleRepository.findById(id).orElse(null);
-       // Customer customer = customerRepository.findById(id).orElse(null);
 
         if (sale != null) {
             return ResponseEntity.ok(sale);
