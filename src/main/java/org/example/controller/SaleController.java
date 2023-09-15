@@ -30,14 +30,12 @@ public class SaleController {
         List<Sale> sales = saleRepository.findAll();
 
         if (sales.isEmpty()) {
-            String mensagem = "A lista de vendas está vazia.";
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("A lista de vendas está vazia.");
         }
 
         return ResponseEntity.ok(sales);
 
     }
-
 
     @GetMapping("/salesAbove10")
     public ResponseEntity<Object> getSalesAbove10() {
@@ -49,12 +47,14 @@ public class SaleController {
 
         return ResponseEntity.ok(salesAbove10);
     }
+
     @PutMapping("/updateTotalValueToZero")
     public ResponseEntity<Void> updateTotalValueToZero() {
         saleRepository.updateTotalValueToZero();
         return ResponseEntity.ok().build();
     }
-        @PostMapping
+
+    @PostMapping
     public ResponseEntity<Object> createSale(@RequestBody Sale sale) {
         Optional<Seller> sellerOptional = sellerRepository.findById(sale.getSeller().getId());
         if (!sellerOptional.isPresent()) {
@@ -81,22 +81,6 @@ public class SaleController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Venda com ID " + id + " não encontrada.");
         }
     }
-
-
-
-//    @PutMapping("/{id}")
-//    public Sale updateSale(@PathVariable Long id, @RequestBody Sale updatedSale) {
-//        return saleRepository.findById(id).map(sale -> {
-//            sale.setSellerId(updatedSale.getSellerId());
-//            sale.setCustomerId(updatedSale.getCustomerId());
-//            sale.setProductId(updatedSale.getProductId());
-//            sale.setProductName(updatedSale.getProductName());
-//            sale.setProductPrice(updatedSale.getProductPrice());
-//            sale.setProductQuantity(updatedSale.getProductQuantity());
-//            sale.setTotalValue(updatedSale.getTotalValue());
-//            return saleRepository.save(sale);
-//        }).orElse(null);
-//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Sale> updateSale(@PathVariable Long id, @RequestBody Sale updatedSale) {
@@ -137,6 +121,5 @@ public class SaleController {
         saleRepository.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Venda com ID " + id + " foi deletada com sucesso.");
     }
-
 }
 

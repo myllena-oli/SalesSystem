@@ -28,7 +28,6 @@ public class CustomerController {
     }
 
 
-
     @PostMapping("/countByEmailContaining")
     public ResponseEntity<String> countCustomersByEmailContaining(@RequestBody Map<String, String> requestBody) {
         String email = requestBody.get("email");
@@ -70,7 +69,6 @@ public class CustomerController {
 
     }
 
-    // VER SE QUERO ATUALIZAR O CLIENTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
     @PutMapping("/{id}")
     public Customer updateCustomer(@PathVariable Long id, @RequestBody Customer updatedCustomer) {
         return customerRepository.findById(id).map(customer -> {
@@ -81,6 +79,5 @@ public class CustomerController {
             return customerRepository.save(customer);
         }).orElse(null);
     }
-
 }
 

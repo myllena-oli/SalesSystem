@@ -27,7 +27,6 @@ public class SellerController {
     }
 
 
-
     @PostMapping
     public ResponseEntity<Object> createSeller(@RequestBody Seller seller) {
         sellerRepository.save(seller);
@@ -56,7 +55,6 @@ public class SellerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vendedor com ID " + id + " não encontrado.");
         }
     }
-
 
 
     @PutMapping("/{id}")
